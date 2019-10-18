@@ -1,0 +1,23 @@
+{
+  "name": "seubarriga",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon src/server.js",
+    "test": "jest --watch --verbose=true",
+    "lint": "eslint src/** __tests__/** --fix"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.19",
+    "eslint": "^6.5.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "jest": "^24.9.0",
+    "nodemon": "^1.19.4",
+    "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
