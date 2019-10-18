@@ -8,6 +8,14 @@
     "test": "jest --watch --verbose=true",
     "lint": "eslint src/** __tests__/** --fix"
   },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "consign": "^0.1.6",
+    "dotenv-safe": "^8.1.0",
+    "express": "^4.17.1",
+    "knex": "^0.19.5",
+    "pg": "^7.12.1"
+  },
   "devDependencies": {
     "@types/jest": "^24.0.19",
     "eslint": "^6.5.1",
@@ -16,8 +24,5 @@
     "jest": "^24.9.0",
     "nodemon": "^1.19.4",
     "supertest": "^4.0.2"
-  },
-  "dependencies": {
-    "express": "^4.17.1"
   }
 }
