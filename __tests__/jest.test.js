@@ -1,4 +1,4 @@
-test('to know some main Jest assertions', () => {
+test.skip('to know some main Jest assertions', () => {
   let number = null;
   expect(number).toBeNull();
   number = 10;
@@ -9,7 +9,7 @@ test('to know some main Jest assertions', () => {
   expect(number).toBeLessThan(11);
 });
 
-test('to know how to work with objects', () => {
+test.skip('to know how to work with objects', () => {
   const obj = { name: 'John', email: 'john@email.com' };
   expect(obj).toHaveProperty('name');
   expect(obj).toHaveProperty('name', 'John');
