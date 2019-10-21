@@ -1,8 +1,9 @@
 const request = require('supertest');
+const jwt = require('jsonwebtoken');
 
 const app = require('../../src/app');
 
-const MAIN_ROUTE = '/accounts';
+const MAIN_ROUTE = '/v1/accounts';
 let user;
 
 beforeEach(async () => {
@@ -12,9 +13,11 @@ beforeEach(async () => {
     password: '123456',
   });
   user = { ...res[0] };
+  user.token = jwt.sign(user, process.env.JWT_SECRET);
 });
 
 test('to create a new account successfully', () => request(app).post(MAIN_ROUTE)
+  .set('authorization', `Bearer ${user.token}`)
   .send({ name: 'Acc #1', user_id: user.id })
   .then((result) => {
     expect(result.status).toBe(201);
@@ -22,6 +25,8 @@ test('to create a new account successfully', () => request(app).post(MAIN_ROUTE)
   }));
 
 test('to disallow an account creation without name property', () => request(app).post(MAIN_ROUTE)
+  .set('authorization', `Bearer ${user.token}`)
+
   .send({ user_id: user.id })
   .then((result) => {
     expect(result.status).toBe(400);
@@ -33,6 +38,7 @@ test.todo('to disallow from creating an account whose name property already exis
 test('to list all accounts', () => app.db('accounts')
   .insert({ name: 'Acc list', user_id: user.id })
   .then(() => request(app).get(MAIN_ROUTE)
+    .set('authorization', `Bearer ${user.token}`)
     .then((res) => {
       expect(res.status).toBe(200);
       expect(res.body.length).toBeGreaterThan(0);
@@ -43,6 +49,7 @@ test.todo('to list only accounts from user');
 test('to return an account by ID', () => app.db('accounts')
   .insert({ name: 'Acc by ID', user_id: user.id }, ['id'])
   .then((acc) => request(app).get(`${MAIN_ROUTE}/${acc[0].id}`)
+    .set('authorization', `Bearer ${user.token}`)
     .then((res) => {
       expect(res.status).toBe(200);
       expect(res.body.name).toBe('Acc by ID');
@@ -54,6 +61,7 @@ test.todo('to not return an account from another user');
 test('to update an account property', () => app.db('accounts')
   .insert({ name: 'Acc to update', user_id: user.id }, ['id'])
   .then((acc) => request(app).put(`${MAIN_ROUTE}/${acc[0].id}`)
+    .set('authorization', `Bearer ${user.token}`)
     .send({ name: 'Acc updated' }))
   .then((res) => {
     expect(res.status).toBe(200);
@@ -64,7 +72,8 @@ test.todo('to not update an account property from another user');
 
 test('to remove an account', () => app.db('accounts')
   .insert({ name: 'Acc to delete', user_id: user.id }, ['id'])
-  .then((acc) => request(app).delete(`${MAIN_ROUTE}/${acc[0].id}`))
+  .then((acc) => request(app).delete(`${MAIN_ROUTE}/${acc[0].id}`)
+    .set('authorization', `Bearer ${user.token}`))
   .then((res) => {
     expect(res.status).toBe(204);
   }));
