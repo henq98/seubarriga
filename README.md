@@ -7,9 +7,9 @@
 > create a .env file based on variables from .env.example file
 
 > run the next commands on your terminal: 
-> ``` 
-> docker-compose up -d  
-> yarn
-> yarn knex migrate:latest --env test
->```
+``` 
+docker-compose up -d  
+yarn
+yarn knex migrate:latest --env test
+```
 
