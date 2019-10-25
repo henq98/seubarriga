@@ -2,8 +2,8 @@ require('dotenv-safe').config();
 
 module.exports = {
   test: {
-    client: process.env.DB,
-    version: process.env.DB_VERSION,
+    client: 'pg',
+    version: '11.5',
     connection: {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
