@@ -24,7 +24,7 @@ test('to list all users', () => request(app).get(MAIN_ROUTE)
     expect(res.body.length).toBeGreaterThan(0);
   }));
 
-test('to create an new user successfully', () => request(app).post(MAIN_ROUTE)
+test('to create a new user', () => request(app).post(MAIN_ROUTE)
   .set('authorization', `Bearer ${user.token}`)
   .send({ name: 'Walter Mitty', email, password: '1234' })
   .then((res) => {

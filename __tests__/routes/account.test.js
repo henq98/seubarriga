@@ -24,7 +24,7 @@ beforeEach(async () => {
   user2 = { ...res2[0] };
 });
 
-test('to create a new account successfully', () => request(app).post(MAIN_ROUTE)
+test('to create a new account', () => request(app).post(MAIN_ROUTE)
   .set('authorization', `Bearer ${user.token}`)
   .send({ name: 'Acc #1' })
   .then((result) => {
