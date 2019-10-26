@@ -40,3 +40,51 @@ test('to list only user transactions', () => app.db('transactions').insert([
     expect(res.body).toHaveLength(1);
     expect(res.body[0].description).toBe('T1');
   }));
+
+test('to create a transaction', () => request(app).post(MAIN_ROUTE)
+  .set('authorization', `Bearer ${user.token}`)
+  .send({ description: 'New T', date: new Date(), ammount: 160, type: 'I', acc_id: accUser.id })
+  .then((res) => {
+    expect(res.status).toBe(201);
+    expect(res.body.acc_id).toBe(accUser.id);
+  }));
+
+test('to return a transaction by ID', () => app.db('transactions').insert({
+  description: 'T ID',
+  date: new Date(),
+  ammount: 160,
+  type: 'I',
+  acc_id: accUser.id,
+}, ['id']).then((trans) => request(app).get(`${MAIN_ROUTE}/${trans[0].id}`)
+  .set('authorization', `Bearer ${user.token}`)
+  .then((res) => {
+    expect(res.status).toBe(200);
+    expect(res.body.id).toBe(trans[0].id);
+    expect(res.body.description).toBe('T ID');
+  })));
+
+test('to update a transaction', () => app.db('transactions').insert({
+  description: 'T to update',
+  date: new Date(),
+  ammount: 160,
+  type: 'I',
+  acc_id: accUser.id,
+}, ['id']).then((trans) => request(app).put(`${MAIN_ROUTE}/${trans[0].id}`)
+  .set('authorization', `Bearer ${user.token}`)
+  .send({ description: 'T updated', ammount: 300 })
+  .then((res) => {
+    expect(res.status).toBe(200);
+    expect(res.body.description).toBe('T updated');
+  })));
+
+test('to remove a transaction', () => app.db('transactions').insert({
+  description: 'T to remove',
+  date: new Date(),
+  ammount: 100,
+  type: 'I',
+  acc_id: accUser.id,
+}, ['id']).then((trans) => request(app).delete(`${MAIN_ROUTE}/${trans[0].id}`)
+  .set('authorization', `Bearer ${user.token}`)
+  .then((res) => {
+    expect(res.status).toBe(204);
+  })));

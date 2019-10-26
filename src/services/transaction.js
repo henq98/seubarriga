@@ -5,5 +5,15 @@ module.exports = (app) => {
     .andWhere('accounts.user_id', '=', userId)
     .select();
 
-  return { find };
+  const findOne = (filter) => app.db('transactions').where(filter).first();
+
+  const create = (transaction) => app.db('transactions').insert(transaction, '*');
+
+  const update = (id, transaction) => app.db('transactions')
+    .where({ id })
+    .update(transaction, '*');
+
+  const remove = (id) => app.db('transactions').where({ id }).del();
+
+  return { find, findOne, create, update, remove };
 };
