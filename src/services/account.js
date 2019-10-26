@@ -15,7 +15,9 @@ module.exports = (app) => {
     return app.db('accounts').insert(account, '*');
   };
 
-  const update = (id, account) => app.db('accounts').where({ id }).update(account, '*');
+  const update = (id, account) => app.db('accounts')
+    .where({ id })
+    .update(account, '*');
 
   const remove = (id) => app.db('accounts').where({ id }).del();
 
