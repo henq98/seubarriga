@@ -7,7 +7,7 @@ const MAIN_ROUTE = '/v1/accounts';
 let user;
 let user2;
 
-beforeEach(async () => {
+beforeAll(async () => {
   const res = await app.services.user.create({
     name: 'User Account',
     email: `${Date.now()}@email.com`,
@@ -49,16 +49,22 @@ test('to disallow from creating an account whose name property already exists', 
       expect(res.body.error).toBe('Já existe uma conta com esse nome');
     })));
 
-test('to list only accounts from user', () => app.db('accounts').insert([
-  { name: 'Acc User #1', user_id: user.id },
-  { name: 'Acc User #2', user_id: user2.id },
-]).then(() => request(app).get(MAIN_ROUTE)
-  .set('authorization', `Bearer ${user.token}`)
-  .then((res) => {
-    expect(res.status).toBe(200);
-    expect(res.body.length).toBe(1);
-    expect(res.body[0].name).toBe('Acc User #1');
-  })));
+test('to list only accounts from user', async () => {
+  await app.db('transactions').del();
+  await app.db('accounts').del();
+
+  await app.db('accounts').insert([
+    { name: 'Acc User #1', user_id: user.id },
+    { name: 'Acc User #2', user_id: user2.id },
+  ]);
+
+  const response = await request(app).get(MAIN_ROUTE).set('authorization', `Bearer ${user.token}`);
+
+  expect(response.status).toBe(200);
+  expect(response.body.length).toBe(1);
+  expect(response.body[0].name).toBe('Acc User #1');
+});
+
 
 test('to return an account by ID', () => app.db('accounts')
   .insert({ name: 'Acc by ID', user_id: user.id }, ['id'])
@@ -115,3 +121,27 @@ test('to not remove an account from another user', () => app.db('accounts')
       expect(res.status).toBe(403);
       expect(res.body.error).toBe('Este recurso não pertence ao usuário');
     })));
+
+test('to not remove an account with transaction', async () => {
+  await app.db('transactions').del();
+  await app.db('accounts').del();
+
+  const acc = await app.db('accounts').insert({
+    name: 'Acc with transaction',
+    user_id: user.id,
+  }, ['id']);
+
+  await app.db('transactions').insert({
+    description: 'not removable',
+    date: new Date(),
+    amount: 100,
+    type: 'I',
+    acc_id: acc[0].id,
+  });
+
+  const response = await request(app).delete(`${MAIN_ROUTE}/${acc[0].id}`)
+    .set('authorization', `Bearer ${user.token}`);
+
+  expect(response.status).toBe(400);
+  expect(response.body.error).toBe('Essa conta possui transações associadas');
+});
