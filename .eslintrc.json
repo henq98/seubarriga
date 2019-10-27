@@ -17,6 +17,7 @@
         "sourceType": "module"
     },
     "rules": {
-        "object-curly-newline": "off"
+        "object-curly-newline": "off",
+        "camelcase": "off"
     }
 }
