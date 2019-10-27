@@ -12,4 +12,3 @@ docker-compose up -d
 yarn
 yarn knex migrate:latest --env test
 ```
-
