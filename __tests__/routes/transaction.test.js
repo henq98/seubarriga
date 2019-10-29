@@ -50,7 +50,7 @@ test('to create a transaction', () => request(app).post(MAIN_ROUTE)
     expect(res.body.amount).toBe('160.00');
   }));
 
-it('Input (I) transaction type should be positive', () => request(app).post(MAIN_ROUTE)
+it('onbound transaction must be positive', () => request(app).post(MAIN_ROUTE)
   .set('authorization', `Bearer ${user.token}`)
   .send({ description: 'New T', date: new Date(), amount: -160, type: 'I', acc_id: accUser.id })
   .then((res) => {
@@ -59,7 +59,7 @@ it('Input (I) transaction type should be positive', () => request(app).post(MAIN
     expect(res.body.amount).toBe('160.00');
   }));
 
-it('Output (O) transaction type should be negative', () => request(app).post(MAIN_ROUTE)
+it('outbound transaction must be negative', () => request(app).post(MAIN_ROUTE)
   .set('authorization', `Bearer ${user.token}`)
   .send({ description: 'New T', date: new Date(), amount: 160, type: 'O', acc_id: accUser.id })
   .then((res) => {

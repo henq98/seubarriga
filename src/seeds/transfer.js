@@ -1,6 +1,6 @@
 
 exports.seed = (knex) => knex('transactions').del()
-  .then(() => knex('transactions').del())
+  .then(() => knex('transfers').del())
   .then(() => knex('accounts').del())
   .then(() => knex('users').del())
   .then(() => knex('users').insert([
