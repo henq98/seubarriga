@@ -49,5 +49,10 @@
         "lines": 100
       }
     }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint && yarn coverage"
+    }
   }
 }
