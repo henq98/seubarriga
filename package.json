@@ -4,9 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon src/server.js",
-    "test": "jest --watch --verbose=true",
-    "coverage": "jest --coverage --runInBand --forceExit",
+    "start": "NODE_ENV=prod node src/server.js",
+    "test": "NODE_ENV=test jest --watch --verbose=true",
+    "coverage": "NODE_ENV=test jest --coverage --runInBand --forceExit",
     "lint": "eslint src/** __tests__/** --fix"
   },
   "dependencies": {

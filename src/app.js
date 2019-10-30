@@ -1,4 +1,15 @@
-require('dotenv-safe').config();
+/* eslint-disable global-require */
+const path = require('path');
+
+if (process.env.NODE_ENV === 'prod') {
+  require('dotenv-safe').config({
+    path: path.resolve(process.cwd(), '.env'),
+  });
+} else {
+  require('dotenv-safe').config({
+    path: path.resolve(process.cwd(), '.env.test'),
+  });
+}
 
 const app = require('express')();
 const consign = require('consign');
@@ -6,7 +17,7 @@ const knex = require('knex');
 
 const knexfile = require('../knexfile');
 // TODO criar chaveamento dinâmico
-app.db = knex(knexfile.test);
+app.db = knex(knexfile[process.env.NODE_ENV]);
 
 consign({ cwd: 'src', verbose: false })
   .include('./config/passport.js')
