@@ -51,6 +51,7 @@ test('to disallow from creating an account whose name property already exists', 
 
 test('to list only accounts from user', async () => {
   await app.db('transactions').del();
+  await app.db('transfers').del();
   await app.db('accounts').del();
 
   await app.db('accounts').insert([

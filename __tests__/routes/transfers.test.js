@@ -162,6 +162,11 @@ describe('when updating a valid transfer', () => {
     expect(outbound.transfer_id).toBe(transferId);
   });
 
+  it('should both have completed status', () => {
+    expect(inbound.status).toBe(true);
+    expect(outbound.status).toBe(true);
+  });
+
   it('outbound transaction must be negative', () => {
     expect(outbound.description).toBe('Transfer to acc #10001');
     expect(outbound.amount).toBe('-500.00');

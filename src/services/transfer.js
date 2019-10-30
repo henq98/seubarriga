@@ -42,8 +42,8 @@ module.exports = (app) => {
     } = transfer;
 
     const transactions = [
-      { description: `Transfer to acc #${acc_dest_id}`, date, amount: amount * -1, type: 'O', acc_id: acc_ori_id, transfer_id: transferId },
-      { description: `Transfer from acc #${acc_ori_id}`, date, amount, type: 'I', acc_id: acc_dest_id, transfer_id: transferId },
+      { description: `Transfer to acc #${acc_dest_id}`, date, amount: amount * -1, type: 'O', acc_id: acc_ori_id, transfer_id: transferId, status: true },
+      { description: `Transfer from acc #${acc_ori_id}`, date, amount, type: 'I', acc_id: acc_dest_id, transfer_id: transferId, status: true },
     ];
 
     await app.db('transactions').insert(transactions);
@@ -64,8 +64,8 @@ module.exports = (app) => {
     } = transfer;
 
     const transactions = [
-      { description: `Transfer to acc #${acc_dest_id}`, date, amount: amount * -1, type: 'O', acc_id: acc_ori_id, transfer_id: id },
-      { description: `Transfer from acc #${acc_ori_id}`, date, amount, type: 'I', acc_id: acc_dest_id, transfer_id: id },
+      { description: `Transfer to acc #${acc_dest_id}`, date, amount: amount * -1, type: 'O', acc_id: acc_ori_id, transfer_id: id, status: true },
+      { description: `Transfer from acc #${acc_ori_id}`, date, amount, type: 'I', acc_id: acc_dest_id, transfer_id: id, status: true },
     ];
 
     await app.db('transactions').where({ transfer_id: id }).del();
